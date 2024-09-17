@@ -18,10 +18,10 @@ def process_object(object):
     # flatten objects
     object = order_dict(df.to_dict(orient='records')[0])
     # fix types
-    object['bndbox_xmax'] = int(object['bndbox_xmax'])
-    object['bndbox_ymax'] = int(object['bndbox_ymax'])
-    object['bndbox_xmin'] = int(object['bndbox_xmin'])
-    object['bndbox_ymin'] = int(object['bndbox_ymin'])
+    object['bndbox_xmax'] = round(float(object['bndbox_xmax']))
+    object['bndbox_ymax'] = round(float(object['bndbox_ymax']))
+    object['bndbox_xmin'] = round(float(object['bndbox_xmin']))
+    object['bndbox_ymin'] = round(float(object['bndbox_ymin']))
 
     return object
 
