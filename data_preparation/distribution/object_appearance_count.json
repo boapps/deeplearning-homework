@@ -1,0 +1,22 @@
+{
+    "Aeroplane": 1002,
+    "Person": 17401,
+    "Bird": 1271,
+    "Boat": 1059,
+    "Car": 2492,
+    "Motorbike": 801,
+    "Bus": 685,
+    "Chair": 3056,
+    "Pottedplant": 1202,
+    "Bicycle": 837,
+    "Bottle": 1561,
+    "Tvmonitor": 893,
+    "Cat": 1277,
+    "Sofa": 841,
+    "Diningtable": 800,
+    "Train": 704,
+    "Dog": 1598,
+    "Sheep": 1084,
+    "Horse": 803,
+    "Cow": 771
+}
