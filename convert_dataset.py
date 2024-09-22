@@ -24,6 +24,7 @@ def process_object(object):
     object["bndbox_ymax"] = round(float(object["bndbox_ymax"]))
     object["bndbox_xmin"] = round(float(object["bndbox_xmin"]))
     object["bndbox_ymin"] = round(float(object["bndbox_ymin"]))
+    object["difficult"] = int(object["difficult"])
 
     return object
 
