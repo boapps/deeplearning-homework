@@ -163,3 +163,4 @@ cython_debug/
 
 data/
 data_preparation/relations/
+data_preparation/relations_copy/
