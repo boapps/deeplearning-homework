@@ -15,3 +15,4 @@ tqdm
 widgetsnbextension
 xmltodict
 jsonlines
+albumentations
