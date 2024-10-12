@@ -45,6 +45,6 @@ def iterate_xml_folder(input_folder, output_folder):
 
 if __name__ == "__main__":
     input_folder = '../data/VOCdevkit/VOC2012/Annotations'
-    output_folder = './relations'
+    output_folder = '../data/relations'
 
     iterate_xml_folder(input_folder, output_folder)

@@ -162,5 +162,3 @@ cython_debug/
 #.idea/
 
 data/
-data_preparation/relations/
-data_preparation/relations_copy/
