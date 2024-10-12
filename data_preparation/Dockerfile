@@ -1,6 +1,6 @@
-FROM python:3.11
+FROM python:3.12
 
-# albumentations needs opencv-python-headless which broke on 3.12
+# albumentations needs opencv-python-headless which broke on 3.13
 # https://github.com/opencv/opencv-python/issues/993
 # :)
 
