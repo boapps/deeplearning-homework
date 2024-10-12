@@ -73,5 +73,8 @@ def convert_xml_to_json_lines(input_folder, output_file):
 if __name__ == "__main__":
     input_folder = "../data/VOCdevkit/VOC2012/Annotations"  # Replace with the path to your XML folder
     output_file = "../data/dataset.jsonl"  # Output JSONL file
-    convert_xml_to_json_lines(input_folder, output_file)
-    print(f"Conversion completed. JSON Lines saved to {output_file}.")
+    if os.path.exists(output_file):
+        print('dataset.jsonl exists, exiting')
+    else:
+        convert_xml_to_json_lines(input_folder, output_file)
+        print(f"Conversion completed. JSON Lines saved to {output_file}.")
