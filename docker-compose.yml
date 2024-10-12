@@ -1,0 +1,9 @@
+services:
+  jupyter:
+    image: buvarok-jupyter-data
+    ports:
+      - 8888:8888
+    volumes:
+      - ./data:/data
+    build:
+      context: data_preparation

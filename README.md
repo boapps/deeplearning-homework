@@ -23,7 +23,7 @@ Dataset chosen: [Pascal 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#de
 Files:
 
 - `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file. Needed for the `data_analysis.ipynb` notebook.
-- `data_preparation/download_data.py`: Downloads the dataset and extracts it to the .
+- `data_preparation/download_data.py`: Downloads the dataset and extracts it to the `data` folder.
 - `data_preparation/requirements.txt`: Contains the required python packages.
 - `data_preparation/data_analysis.ipynb`: This notebook contains the exploratory data analysis.
 - TODO: ...
@@ -35,5 +35,17 @@ Related works:
 **TODO: related works goes here**
 
 How to run:
+
+1. Start container:
+
+```bash
+docker compose up
+```
+
+2. Open [Jupyter Lab](http://127.0.0.1:8888/lab)
+
+3. ???
+
+4. Profit
 
 **TODO**

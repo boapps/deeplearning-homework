@@ -1,0 +1,17 @@
+beautifulsoup4
+ipykernel
+ipython
+ipywidgets
+jupyter
+matplotlib
+numpy
+pandas
+pillow
+Pygments
+requests
+seaborn
+setuptools
+tqdm
+widgetsnbextension
+xmltodict
+jsonlines
