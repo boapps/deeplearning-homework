@@ -61,7 +61,7 @@ docker compose up
 
 2. Open [Jupyter Lab](http://127.0.0.1:8888/lab)
 
-3. ???
+3. Enjoy the prepared notebooks
 
 4. Profit
 
