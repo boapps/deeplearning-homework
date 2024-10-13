@@ -25,21 +25,25 @@ Dataset chosen: [Pascal 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#de
 
 ## Files
 
-*This is just explanations, these are run automatically when you star the container.*
 Initialization scripts:
-- `data_preparation/download_data.py`: Downloads the dataset and extracts it to the `data` folder.
-- `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file. Needed for the `data_analysis.ipynb` notebook.
-- `data_preparation/object_picture_relation_finder.py`: Downloads the dataset and extracts it to the `data` folder.
+
+*These scripts are run automatically when you start the container.*
+
+- `data_preparation/download_data.py`: Downloads the dataset and extracts it into the `data` folder.
+- `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file, which is necessary for the `data_analysis.ipynb` notebook.
+- `data_preparation/object_picture_relation_finder.py`: Creates a new `data/relations` folder required by `even_distribution_creator.ipynb`.
 
 Misc files:
-- `data_preparation/requirements.txt`: Contains the required python packages.
+
+- `data_preparation/requirements.txt`: Contains the required Python packages.
 - `data_preparation/Dockerfile`: Describes the docker image.
-- `data_preparation/run.sh`: Runs the initialization scripts in sequence, followed by starting jupyter lab.
+- `data_preparation/run.sh`: Runs the initialization scripts in sequence, and then starts Jupyter Lab.
 
 Notebooks:
+
 - `data_preparation/data_analysis.ipynb`: This notebook guides us through the exploratory data analysis.
 - `data_preparation/size_converter.ipynb`: Fixes format of xml files in data for the following notebook.
-- `data_preparation/even_distribution_creator.ipynb`: Our doomed beautiful endeavor at lowering class imbalance showing slight\* improvements.
+- `data_preparation/even_distribution_creator.ipynb`: Our doomed beautiful endeavor at lowering class imbalance, demonstrating modest\* improvements.
 
 \*: standard deviation of classes lowered from 340 to 287
 
@@ -65,7 +69,7 @@ We used the following pages to complete our code:
 
 ## How to run
 
-1. Start container:
+1. Start the container:
 
 ```bash
 docker compose up
@@ -77,7 +81,8 @@ docker compose up
 
 4. Profit
 
-### requirements
+### Requirements
 
 - A recent version of docker and docker compose.
 - ~6 GB of free space: The docker image takes about 1 GB of storage, while the compressed+extracted dataset takes about 4.5 GB.
+- Port 8888 open.
