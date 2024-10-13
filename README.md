@@ -25,11 +25,23 @@ Dataset chosen: [Pascal 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#de
 
 ## Files
 
-- `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file. Needed for the `data_analysis.ipynb` notebook.
+*This is just explanations, these are run automatically when you star the container.*
+Initialization scripts:
 - `data_preparation/download_data.py`: Downloads the dataset and extracts it to the `data` folder.
+- `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file. Needed for the `data_analysis.ipynb` notebook.
+- `data_preparation/object_picture_relation_finder.py`: Downloads the dataset and extracts it to the `data` folder.
+
+Misc files:
 - `data_preparation/requirements.txt`: Contains the required python packages.
-- `data_preparation/data_analysis.ipynb`: This notebook contains the exploratory data analysis.
-- TODO: ...
+- `data_preparation/Dockerfile`: Describes the docker image.
+- `data_preparation/run.sh`: Runs the initialization scripts in sequence, followed by starting jupyter lab.
+
+Notebooks:
+- `data_preparation/data_analysis.ipynb`: This notebook guides us through the exploratory data analysis.
+- `data_preparation/size_converter.ipynb`: Fixes format of xml files in data for the following notebook.
+- `data_preparation/even_distribution_creator.ipynb`: Our doomed beautiful endeavor at lowering class imbalance showing slight\* improvements.
+
+\*: standard deviation of classes lowered from 340 to 287
 
 ## Related works
 
