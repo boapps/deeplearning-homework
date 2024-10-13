@@ -35,7 +35,22 @@ Dataset chosen: [Pascal 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#de
 
 *Note: The lesson materials did not indicate that we would need to explore related works by this deadline, and to our knowledge, this expectation was not communicated during the lectures either. Additionally, it would have been helpful to receive the milestone requirements well in advance rather than at the last minute.*
 
-**TODO: related works goes here**
+We were inspired by the following works:
+- https://github.com/farakiko/ImageSegmentationPASCAL
+
+- https://www.ibm.com/topics/image-segmentation
+
+- http://host.robots.ox.ac.uk/pascal/VOC/voc2012/devkit_doc.pdf
+
+- https://www.superannotate.com/blog/image-segmentation-for-machine-learning
+
+
+We used the following pages to complete our code:
+- https://www.geeksforgeeks.org/read-json-file-using-python/
+
+- https://github.com/albumentations-team/albumentations
+
+- https://albumentations.ai/docs/examples/example/
 
 ## How to run
 
