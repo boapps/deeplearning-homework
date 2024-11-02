@@ -93,14 +93,11 @@ class UNet(pl.LightningModule):
     def __init__(self, num_classes):
         super(UNet, self).__init__()
         self.model = seg_models.fcn_resnet50(pretrained=False, num_classes=num_classes)
-        self.extra_conv = nn.Conv2d(num_classes, num_classes, kernel_size=3, padding=1)
         self.jaccard = JaccardIndex(task='multiclass', num_classes=num_classes, ignore_index=255)
         self.mean_iou = MeanIoU(num_classes=num_classes) # no ignore_index :(
 
     def forward(self, x):
-        x = self.model(x)['out']  # Output of fcn_resnet50
-        x = self.extra_conv(x)     # TEST THIS LAYER
-        return x
+        return self.model(x)['out']
     
     def training_step(self, batch, batch_idx):
         images, masks = batch
