@@ -7,6 +7,39 @@ from tqdm import tqdm
 # Note: gpt-4o-mini was used to assist in the writing of this script
 
 
+# https://stackoverflow.com/a/39225272
+def download_file_from_google_drive(file_id, destination):
+    URL = "https://docs.google.com/uc?export=download&confirm=1"
+
+    session = requests.Session()
+
+    response = session.get(URL, params={"id": file_id}, stream=True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = {"id": file_id, "confirm": token}
+        response = session.get(URL, params=params, stream=True)
+
+    save_response_content(response, destination)
+
+
+def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith("download_warning"):
+            return value
+
+    return None
+
+
+def save_response_content(response, destination):
+    CHUNK_SIZE = 32768
+
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk:  # filter out keep-alive new chunks
+                f.write(chunk)
+
+
 def download_tar_file(url: str, dest_path: str) -> str:
     """
     Download a tar file from a given URL and save it to a destination path.
@@ -23,14 +56,24 @@ def download_tar_file(url: str, dest_path: str) -> str:
     if response.status_code == 200:
         total_size = int(response.headers.get("content-length", 0))
 
-        with open(dest_path, "wb") as f:
-            with tqdm(
-                total=total_size, unit="B", unit_scale=True, unit_divisor=1024
-            ) as bar:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
-                    bar.update(len(chunk))
-        print(f"\nDownloaded tar file to {dest_path}")
+        # Send a request to get the file size for progress tracking
+        response = requests.get(url, stream=True)
+        total_size = int(response.headers.get('content-length', 0))
+
+        # Download the file with a progress bar
+        with open(dest_path, 'wb') as file, tqdm(
+            desc="Downloading",
+            total=total_size,
+            unit='B',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as progress_bar:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    file.write(chunk)
+                    progress_bar.update(len(chunk))
+
+        print("Download completed successfully.")
         return dest_path
     else:
         raise Exception(f"Failed to download file. Status code: {response.status_code}")
@@ -67,7 +110,7 @@ def compute_file_hash(file_path: str) -> str:
 
 
 def main():
-    url = "https://drive.google.com/uc?export=download&id=1K_CyHqQYOOfO8xNRyjZpEFP4Ho48j7c0"
+    url = 'https://www.dropbox.com/scl/fi/jsumicca8xqj9qwjaw8ac/test.tar?rlkey=m44x5olxh8v6jwu27n54nk796&st=ofto2v33&dl=1'
     dest_path = "../data/test.tar"
     extract_path = "../test"
     expected_hash = "f08582b1935816c5eab3bbb1eb6d06201a789eaa173cdf1cf400c26f0cac2fb3"
