@@ -1,40 +1,53 @@
 from datasets import Dataset, Image
-import os
 from transformers import AutoModelForSemanticSegmentation, TrainingArguments, Trainer
 from transformers import AutoImageProcessor
+import os
 import numpy as np
 import torch
 from torch import nn
 import evaluate
+from data_split import get_split_indices  # Import split function
 
 checkpoint = "nvidia/mit-b0"
 
-image_paths_train = [
-    "img/" + f for f in sorted(os.listdir("img")) if f.endswith((".jpg"))
-]
-label_paths_train = [
-    f.replace("jpg", "png").replace("img", "msk") for f in image_paths_train
-]
+# Set image and mask paths because we are using the same dataset all the time
+image_dir = "./img"
+mask_dir = "./msk"
 
+images = sorted([f for f in os.listdir(image_dir) if f.endswith(".jpg")])
+image_paths = ["img/" + f for f in images]
+label_paths = [f.replace("jpg", "png").replace("img", "msk") for f in image_paths]
 
-def create_dataset(image_paths, label_paths):
-    dataset = Dataset.from_dict(
-        {"image": sorted(image_paths), "label": sorted(label_paths)}
-    )
-    dataset = dataset.cast_column("image", Image())
-    dataset = dataset.cast_column("label", Image())
-    return dataset
+# Get consistent split indices
+split_indices = get_split_indices(image_dir)
 
+train_dataset = Dataset.from_dict({
+    "image": [image_paths[i] for i in split_indices["train"]],
+    "label": [label_paths[i] for i in split_indices["train"]]
+})
+val_dataset = Dataset.from_dict({
+    "image": [image_paths[i] for i in split_indices["val"]],
+    "label": [label_paths[i] for i in split_indices["val"]]
+})
+test_dataset = Dataset.from_dict({
+    "image": [image_paths[i] for i in split_indices["test"]],
+    "label": [label_paths[i] for i in split_indices["test"]]
+})
 
-train_dataset = create_dataset(image_paths_train, label_paths_train)
-dataset = train_dataset.train_test_split(seed=42)
+# Convert the image and label columns to `Image` format
+train_dataset = train_dataset.cast_column("image", Image())
+train_dataset = train_dataset.cast_column("label", Image())
+val_dataset = val_dataset.cast_column("image", Image())
+val_dataset = val_dataset.cast_column("label", Image())
+test_dataset = test_dataset.cast_column("image", Image())
+test_dataset = test_dataset.cast_column("label", Image())
 
 id2label = {i: str(i) for i in range(20)}
 id2label[255] = "255"
-
 label2id = {str(i): i for i in range(20)}
 label2id["255"] = 255
 
+image_processor = AutoImageProcessor.from_pretrained(checkpoint, do_reduce_labels=True)
 
 def train_transforms(example_batch):
     images = [x for x in example_batch["image"]]
@@ -42,22 +55,17 @@ def train_transforms(example_batch):
     inputs = image_processor(images, labels)
     return inputs
 
-
 def val_transforms(example_batch):
     images = [x for x in example_batch["image"]]
     labels = [x for x in example_batch["label"]]
     inputs = image_processor(images, labels)
     return inputs
 
-
-dataset["train"].set_transform(train_transforms)
-dataset["test"].set_transform(val_transforms)
-
-
-image_processor = AutoImageProcessor.from_pretrained(checkpoint, do_reduce_labels=True)
+train_dataset.set_transform(train_transforms)
+val_dataset.set_transform(val_transforms)
+test_dataset.set_transform(val_transforms)
 
 metric = evaluate.load("mean_iou")
-
 
 def compute_metrics(eval_pred):
     with torch.no_grad():
@@ -83,7 +91,6 @@ def compute_metrics(eval_pred):
                 metrics[key] = value.tolist()
         return metrics
 
-
 model = AutoModelForSemanticSegmentation.from_pretrained(
     checkpoint, id2label=id2label, label2id=label2id
 )
@@ -108,8 +115,8 @@ training_args = TrainingArguments(
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=dataset["train"],
-    eval_dataset=dataset["test"],
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
     compute_metrics=compute_metrics,
 )
 
