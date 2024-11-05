@@ -128,4 +128,3 @@ docker compose up
 - Milestone 1 must be run beforehand.
 - A recent version of docker and docker compose.
 - ~22 GB of RAM is needed: The docker image takes about 11 GB of storage
-- Port 8888 open.
