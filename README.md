@@ -23,7 +23,7 @@ Task of the students: explore transformer networks for medical image segmentatio
 
 Dataset chosen: [Pascal 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit)
 
-# Milestonse1
+# Milestonse 1
 
 ## Files
 
@@ -90,8 +90,7 @@ docker compose up
 - Port 8888 open.
 
 
-
-# Milestonse2
+# Milestonse 2
 
 Initialization scripts:
 
@@ -107,50 +106,26 @@ Initialization scripts:
 - `training/train_vit.py`: Trains a Vision Transformer model which is based on the MiT-B0 architecture.
 - `training/test_vit.py`: Tests a Vision Transformer model which is based on the MiT-B0 architecture.
 
-Misc files:
-
-
-Notebooks:
-
-
-\*: standard deviation of classes lowered from 340 to 287
 
 ## Related works
 
 We were inspired by the following works:
 
-- https://github.com/farakiko/ImageSegmentationPASCAL
-
-- https://www.ibm.com/topics/image-segmentation
-
-- http://host.robots.ox.ac.uk/pascal/VOC/voc2012/devkit_doc.pdf
-
-- https://www.superannotate.com/blog/image-segmentation-for-machine-learning
-
-We used the following pages to complete our code:
-
-- https://www.geeksforgeeks.org/read-json-file-using-python/
-
-- https://github.com/albumentations-team/albumentations
-
-- https://albumentations.ai/docs/examples/example/
+- https://huggingface.co/docs/transformers/en/tasks/semantic_segmentation
 
 ## How to run
 
-1. Start the container:
+1. Navigate into the training folder
+
+2. Start the container:
 
 ```bash
 docker compose up
 ```
 
-2. Open [Jupyter Lab](http://127.0.0.1:8888/lab)
-
-3. Enjoy the prepared notebooks
-
-4. Profit
-
 ### Requirements
 
+- Milestone 1 must be run beforehand.
 - A recent version of docker and docker compose.
-- ~6 GB of free space: The docker image takes about 1 GB of storage, while the compressed+extracted dataset takes about 4.5 GB.
+- ~22 GB of RAM is needed: The docker image takes about 11 GB of storage
 - Port 8888 open.
