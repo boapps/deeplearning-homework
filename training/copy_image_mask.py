@@ -41,7 +41,7 @@ def copy_images_and_masks(relation_folder, image_dir, mask_dir, augmented_dir, t
             mask_path_out = './msk'
             
             if os.path.exists(aug_img_path):
-                shutil.copy(img_path, img_path_out)
+                shutil.copy(aug_img_path, img_path_out)
             
             if os.path.exists(mask_path):
                 shutil.copy(mask_path, mask_path_out)
