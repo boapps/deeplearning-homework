@@ -1,21 +1,14 @@
-import os
-import random
 import torch
-from torch.utils.data import Dataset, DataLoader, random_split
-from torchvision import transforms
-import torchvision.transforms.functional as TF
-from PIL import Image
 import pytorch_lightning as pl
 from torch import nn
 from torchmetrics import JaccardIndex
 from torchmetrics.segmentation import MeanIoU
-import numpy as np
 import torchvision.models.segmentation as seg_models
 import torch.nn.functional as F
-import wandb
+# import wandb
 from dataset import create_data_loaders, evaluate_model
 
-wandb.init(project="segmentation_project", entity="melytanulo-buvarok")
+# wandb.init(project="segmentation_project", entity="melytanulo-buvarok")
 
 class UNet(pl.LightningModule):
     def __init__(self, num_classes):
@@ -39,7 +32,7 @@ class UNet(pl.LightningModule):
         self.log("train_loss", loss)
         
         # Log to WandB
-        wandb.log({"train_loss": loss})
+        # wandb.log({"train_loss": loss})
         
         return loss
     
@@ -57,7 +50,7 @@ class UNet(pl.LightningModule):
         self.log("val_mean_iou", mean_iou)
         
         # Log to WandB
-        wandb.log({"val_loss": loss, "val_jaccard": jaccard, "val_mean_iou": mean_iou})
+        # wandb.log({"val_loss": loss, "val_jaccard": jaccard, "val_mean_iou": mean_iou})
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=1e-4)
@@ -72,9 +65,9 @@ trainer.fit(model, train_loader, val_loader)
 evaluate_model(model, val_loader)
 
 # Save the model
-model_path = 'cnn_v2.pth'
+model_path = '../data/cnn_v2.pth'
 torch.save(model.state_dict(), model_path)
 print(f"Model saved to {model_path}")
 
 # Finish the W&B run
-wandb.finish()
+# wandb.finish()

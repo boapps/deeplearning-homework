@@ -1,0 +1,16 @@
+services:
+  training:
+    image: buvarok-jupyter-training
+    ports:
+      - 8888:8888
+    volumes:
+      - ./data:/data
+    build:
+      context: .
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

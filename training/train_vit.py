@@ -1,5 +1,4 @@
-from datasets import Dataset, DatasetDict, Image
-from torch.utils.data import random_split
+from datasets import Dataset, Image
 import os
 from transformers import AutoModelForSemanticSegmentation, TrainingArguments, Trainer
 from transformers import AutoImageProcessor
@@ -116,4 +115,4 @@ trainer = Trainer(
 
 trainer.train()
 
-model.save_pretrained("vit")
+model.save_pretrained("../data/vit")
