@@ -10,24 +10,32 @@ import evaluate
 
 checkpoint = "nvidia/mit-b0"
 
-image_paths_train = ['img/' + f for f in sorted(os.listdir('img')) if f.endswith(('.jpg'))]
-label_paths_train = [f.replace('jpg', 'png').replace('img', 'msk') for f in image_paths_train]
+image_paths_train = [
+    "img/" + f for f in sorted(os.listdir("img")) if f.endswith((".jpg"))
+]
+label_paths_train = [
+    f.replace("jpg", "png").replace("img", "msk") for f in image_paths_train
+]
+
 
 def create_dataset(image_paths, label_paths):
-    dataset = Dataset.from_dict({"image": sorted(image_paths),
-                                "label": sorted(label_paths)})
+    dataset = Dataset.from_dict(
+        {"image": sorted(image_paths), "label": sorted(label_paths)}
+    )
     dataset = dataset.cast_column("image", Image())
     dataset = dataset.cast_column("label", Image())
     return dataset
+
 
 train_dataset = create_dataset(image_paths_train, label_paths_train)
 dataset = train_dataset.train_test_split(seed=42)
 
 id2label = {i: str(i) for i in range(20)}
-id2label[255] = '255'
+id2label[255] = "255"
 
 label2id = {str(i): i for i in range(20)}
-label2id['255'] = 255
+label2id["255"] = 255
+
 
 def train_transforms(example_batch):
     images = [x for x in example_batch["image"]]
@@ -42,14 +50,15 @@ def val_transforms(example_batch):
     inputs = image_processor(images, labels)
     return inputs
 
-dataset['train'].set_transform(train_transforms)
-dataset['test'].set_transform(val_transforms)
+
+dataset["train"].set_transform(train_transforms)
+dataset["test"].set_transform(val_transforms)
 
 
-image_processor = AutoImageProcessor.from_pretrained(
-    checkpoint, do_reduce_labels=True)
+image_processor = AutoImageProcessor.from_pretrained(checkpoint, do_reduce_labels=True)
 
 metric = evaluate.load("mean_iou")
+
 
 def compute_metrics(eval_pred):
     with torch.no_grad():
@@ -76,7 +85,9 @@ def compute_metrics(eval_pred):
         return metrics
 
 
-model = AutoModelForSemanticSegmentation.from_pretrained(checkpoint, id2label=id2label, label2id=label2id)
+model = AutoModelForSemanticSegmentation.from_pretrained(
+    checkpoint, id2label=id2label, label2id=label2id
+)
 
 training_args = TrainingArguments(
     output_dir="mit-b0-pascal-voc",
@@ -98,8 +109,8 @@ training_args = TrainingArguments(
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=dataset['train'],
-    eval_dataset=dataset['test'],
+    train_dataset=dataset["train"],
+    eval_dataset=dataset["test"],
     compute_metrics=compute_metrics,
 )
 

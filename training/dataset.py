@@ -20,26 +20,33 @@ class VOCDataset(Dataset):
         self.mask_dir = mask_dir
         self.transform = transform
         self.mask_transform = mask_transform
-        self.images = [f for f in sorted(os.listdir(image_dir)) if f.endswith(('.jpg', '.jpeg', '.png'))]
-        
+        self.images = [
+            f
+            for f in sorted(os.listdir(image_dir))
+            if f.endswith((".jpg", ".jpeg", ".png"))
+        ]
+
     def __len__(self):
         return len(self.images)
-    
+
     def __getitem__(self, idx):
         img_name = self.images[idx]
         img_path = os.path.join(self.image_dir, img_name)
-        mask_path = os.path.join(self.mask_dir, img_name.replace('.jpg', '.png').replace('.jpeg', '.png'))
-        
+        mask_path = os.path.join(
+            self.mask_dir, img_name.replace(".jpg", ".png").replace(".jpeg", ".png")
+        )
+
         image = Image.open(img_path).convert("RGB")
         mask = Image.open(mask_path)
-         
+
         if self.transform:
             image = self.transform(image)
         if self.mask_transform:
             mask = self.mask_transform(mask)
-        
+
         mask = np.array(mask, dtype=np.int64)
         return image, torch.from_numpy(mask)
+
 
 def create_data_loaders(
     image_dir, mask_dir, batch_size=8, val_split=0.2, num_workers=4
@@ -120,4 +127,3 @@ def evaluate_model(model, val_loader):
     print(f"Validation Loss: {avg_val_loss:.4f}")
     print(f"Validation Jaccard Index: {avg_jaccard:.4f}")
     print(f"Validation Mean IoU: {avg_mean_iou:.4f}")
-
