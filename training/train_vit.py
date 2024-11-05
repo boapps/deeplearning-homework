@@ -104,3 +104,5 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+model.save_pretrained("vit")

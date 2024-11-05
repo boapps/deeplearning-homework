@@ -172,7 +172,7 @@ def evaluate_model(model, val_loader):
 evaluate_model(model, val_loader)
 
 # Save the model
-model_path = 'unet_model.pth'
+model_path = 'cnn_v2.pth'
 torch.save(model.state_dict(), model_path)
 print(f"Model saved to {model_path}")
 
