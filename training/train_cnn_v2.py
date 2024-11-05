@@ -13,17 +13,12 @@ from dataset import create_data_loaders, evaluate_model
 class UNet(pl.LightningModule):
     def __init__(self, num_classes):
         super(UNet, self).__init__()
-        self.pre_conv = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1)
-        self.model = seg_models.fcn_resnet50(pretrained=False, num_classes=num_classes)
-        self.post_conv = nn.Conv2d(in_channels=num_classes, out_channels=num_classes, kernel_size=3, stride=1, padding=1)
+        self.model = seg_models.fcn_resnet101(pretrained=False, num_classes=num_classes)
         self.jaccard = JaccardIndex(task='multiclass', num_classes=num_classes, ignore_index=255)
         self.mean_iou = MeanIoU(num_classes=num_classes) # no ignore_index :(
 
     def forward(self, x):
-        x = self.pre_conv(x)
-        x = self.model(x)['out']
-        x = self.post_conv(x)
-        return x
+        return self.model(x)['out']
     
     def training_step(self, batch, batch_idx):
         images, masks = batch
@@ -57,7 +52,7 @@ class UNet(pl.LightningModule):
 
 # Initialize model and trainer
 model = UNet(num_classes=21)
-trainer = pl.Trainer(max_epochs=3, accelerator='auto', logger=pl.loggers.WandbLogger())
+trainer = pl.Trainer(max_epochs=3, accelerator='auto')
 train_loader, val_loader, test_loader = create_data_loaders('./img', './msk')
 trainer.fit(model, train_loader, val_loader)
 

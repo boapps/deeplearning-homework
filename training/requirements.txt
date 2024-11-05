@@ -12,3 +12,4 @@ datasets
 evaluate
 pillow
 Pygments
+git+https://github.com/huggingface/accelerate

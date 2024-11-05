@@ -72,7 +72,7 @@ def create_data_loaders(image_dir, mask_dir, batch_size=8, num_workers=4):
 
 
 # Run evaluation on the validation set
-def evaluate_model(model, val_loader):
+def evaluate_model(model, val_loader, test_model=None):
     model.eval()  # Set the model to evaluation mode
     jaccard_meter = JaccardIndex(task="multiclass", num_classes=21, ignore_index=255)
     mean_iou_meter = MeanIoU(num_classes=21)
@@ -98,3 +98,8 @@ def evaluate_model(model, val_loader):
     print(f"Validation Loss: {avg_val_loss:.4f}")
     print(f"Validation Jaccard Index: {avg_jaccard:.4f}")
     print(f"Validation Mean IoU: {avg_mean_iou:.4f}")
+    if test_model:
+        with open(f"../data/test_{test_model}.txt", 'w') as f:
+            f.write(f"Test Loss: {avg_val_loss:.4f}\n")
+            f.write(f"Validation Jaccard Index: {avg_jaccard:.4f}\n")
+            f.write(f"Validation Mean IoU: {avg_mean_iou:.4f}\n")

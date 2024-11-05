@@ -98,7 +98,7 @@ model = AutoModelForSemanticSegmentation.from_pretrained(
 training_args = TrainingArguments(
     output_dir="mit-b0-pascal-voc",
     learning_rate=6e-5,
-    num_train_epochs=50,
+    num_train_epochs=1,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=4,
     save_total_limit=3,
@@ -109,6 +109,7 @@ training_args = TrainingArguments(
     logging_steps=10,
     eval_accumulation_steps=16,
     remove_unused_columns=False,
+    report_to=None,
     # push_to_hub=True,
 )
 

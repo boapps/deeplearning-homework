@@ -77,7 +77,7 @@ model = AutoModelForSemanticSegmentation.from_pretrained(
 eval_args = TrainingArguments(
     output_dir="mit-b0-evaluation",
     learning_rate=6e-5,
-    num_train_epochs=50,
+    num_train_epochs=1,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=4,
     save_total_limit=3,
@@ -88,6 +88,7 @@ eval_args = TrainingArguments(
     logging_steps=10,
     eval_accumulation_steps=16,
     remove_unused_columns=False,
+    report_to=None,
 )
 
 # Set up trainer for evaluation
@@ -98,6 +99,9 @@ trainer = Trainer(
     compute_metrics=compute_metrics,
 )
 
-trainer.evaluate()
-
-model.save_pretrained("../data/vit")
+result = trainer.evaluate()
+print(result)
+with open(f"../data/test_vit.txt", 'w') as f:
+    f.write(f"Test Loss: {result['eval_loss']:.4f}\n")
+    # f.write(f"Validation Jaccard Index: {result['']:.4f}\n")
+    f.write(f"Validation Mean IoU: {result['eval_mean_iou']:.4f}\n")

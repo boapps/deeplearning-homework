@@ -51,7 +51,7 @@ class UNet(pl.LightningModule):
 
 # Initialize model and trainer
 model = UNet(num_classes=21)
-trainer = pl.Trainer(max_epochs=3, accelerator='auto', logger=pl.loggers.WandbLogger())
+trainer = pl.Trainer(max_epochs=3, accelerator='auto')
 train_loader, val_loader, test_loader = create_data_loaders('./img', './msk')
 trainer.fit(model, train_loader, val_loader)
 
