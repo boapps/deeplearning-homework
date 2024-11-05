@@ -52,6 +52,22 @@ class UNet(pl.LightningModule):
         # Log to WandB
         # wandb.log({"val_loss": loss, "val_jaccard": jaccard, "val_mean_iou": mean_iou})
 
+    def test_step(self, batch, batch_idx):
+        images, masks = batch
+        outputs = self(images)
+        loss = F.cross_entropy(outputs, masks, ignore_index=255)
+        preds = outputs.argmax(dim=1)
+        
+        jaccard = self.jaccard(preds, masks)
+        mean_iou = self.mean_iou(preds, masks)
+        
+        self.log("test_loss", loss)
+        self.log("test_jaccard", jaccard)
+        self.log("test_mean_iou", mean_iou)
+        
+        # Log to WandB
+        # wandb.log({"test_loss": loss, "test_jaccard": jaccard, "test_mean_iou": mean_iou})
+
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=1e-4)
 
@@ -61,8 +77,14 @@ trainer = pl.Trainer(max_epochs=3, accelerator='auto', logger=pl.loggers.WandbLo
 train_loader, val_loader, test_loader = create_data_loaders('./img', './msk')
 trainer.fit(model, train_loader, val_loader)
 
-# Call the evaluation method
+# Validation evaluation after training
 evaluate_model(model, val_loader)
+
+# --- Testing Phase ---
+trainer.test(model, test_loader)
+
+# Custom evaluation
+evaluate_model(model, test_loader)
 
 # Save the model
 model_path = '../data/cnn_v2.pth'
