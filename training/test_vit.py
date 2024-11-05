@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import numpy as np
 from datasets import Dataset, Image
 from transformers import AutoModelForSemanticSegmentation, AutoImageProcessor, TrainingArguments, Trainer
