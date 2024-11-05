@@ -32,6 +32,15 @@ Initialization scripts:
 - `data_preparation/download_data.py`: Downloads the dataset and extracts it into the `data` folder.
 - `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file, which is necessary for the `data_analysis.ipynb` notebook.
 - `data_preparation/object_picture_relation_finder.py`: Creates a new `data/relations` folder required by `even_distribution_creator.ipynb`.
+- `training/copy_image_mask.py`: Organizes the images and masks, preparing them and placing them in the designated folder..
+- `training/data_split.py`: Splits the data into the well-known train, test, validation sets.
+- `training/dataset.py`: Creates loaders for the 2 CNN models.
+- `training/train_cnn.py`: Trains a Fully-Convolutional Network model with a ResNet-50 backbone.
+- `training/test_cnn.py`: Tests a Fully-Convolutional Network model with a ResNet-50 backbone.
+- `training/train_cnn_v2.py`: Trains a Fully-Convolutional Network model with a ResNet-101 backbone.
+- `training/test_cnn_v2.py`: Tests a Fully-Convolutional Network model with a ResNet-101 backbone.
+- `training/train_vit.py`: Trains a Vision Transformer model which is based on the MiT-B0 architecture.
+- `training/test_vit.py`: Tests a Vision Transformer model which is based on the MiT-B0 architecture.
 
 Misc files:
 
