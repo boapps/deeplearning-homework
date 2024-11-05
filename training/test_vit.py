@@ -97,6 +97,6 @@ trainer = Trainer(
     compute_metrics=compute_metrics,
 )
 
-trainer.train()
+trainer.evaluate()
 
 model.save_pretrained("../data/vit")
