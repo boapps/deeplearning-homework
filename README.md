@@ -123,6 +123,8 @@ We were inspired by the following works:
 docker compose up
 ```
 
+- With this pipeline, training and testing are performed for all three models.
+
 ### Requirements
 
 - Milestone 1 must be run beforehand.
