@@ -25,6 +25,10 @@ train_dataset = Dataset.from_dict({
     "image": [image_paths[i] for i in split_indices["train"]],
     "label": [label_paths[i] for i in split_indices["train"]]
 })
+val_dataset = Dataset.from_dict({
+    "image": [image_paths[i] for i in split_indices["val"]],
+    "label": [label_paths[i] for i in split_indices["val"]]
+})
 test_dataset = Dataset.from_dict({
     "image": [image_paths[i] for i in split_indices["test"]],
     "label": [label_paths[i] for i in split_indices["test"]]
@@ -33,6 +37,8 @@ test_dataset = Dataset.from_dict({
 # Convert the image and label columns to `Image` format
 train_dataset = train_dataset.cast_column("image", Image())
 train_dataset = train_dataset.cast_column("label", Image())
+val_dataset = val_dataset.cast_column("image", Image())
+val_dataset = val_dataset.cast_column("label", Image())
 test_dataset = test_dataset.cast_column("image", Image())
 test_dataset = test_dataset.cast_column("label", Image())
 
@@ -56,6 +62,7 @@ def val_transforms(example_batch):
     return inputs
 
 train_dataset.set_transform(train_transforms)
+val_dataset.set_transform(val_transforms)
 test_dataset.set_transform(val_transforms)
 
 metric = evaluate.load("mean_iou")
@@ -109,7 +116,7 @@ trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=train_dataset,
-    eval_dataset=test_dataset,
+    eval_dataset=val_dataset,
     compute_metrics=compute_metrics,
 )
 
