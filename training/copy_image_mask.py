@@ -16,6 +16,7 @@ def copy_images_and_masks(relation_folder, image_dir, mask_dir, augmented_dir, t
                 base_name = os.path.splitext(file_name)[0]
                 collected_image_names.add(base_name)
     
+    # Copy original images and masks based on collected base names
     for base_name in tqdm(sorted(collected_image_names), desc="Loading images and masks from relations"):
         img_path = os.path.join(image_dir, f"{base_name}.jpg")
         img_path_out = './img'
@@ -28,7 +29,7 @@ def copy_images_and_masks(relation_folder, image_dir, mask_dir, augmented_dir, t
         if os.path.exists(mask_path):
             shutil.copy(mask_path, mask_path_out)
             
-    
+    # Process augmented files
     augmented_files = os.listdir(augmented_dir)
     augmented_base_names = {f.split('-')[0] for f in augmented_files}
     
@@ -40,18 +41,24 @@ def copy_images_and_masks(relation_folder, image_dir, mask_dir, augmented_dir, t
             mask_path = os.path.join(mask_dir, f"{base_name}.png")
             mask_path_out = './msk'
             
+            # Copy the augmented image
             if os.path.exists(aug_img_path):
                 shutil.copy(aug_img_path, img_path_out)
             
+            # Copy and rename the related mask to match the augmented image FULL filename
             if os.path.exists(mask_path):
-                shutil.copy(mask_path, mask_path_out)
+                new_mask_name = os.path.splitext(img_file)[0] + ".png"
+                new_mask_path_out = os.path.join(mask_path_out, new_mask_name)
+                shutil.copy(mask_path, new_mask_path_out)
 
 relation_folder = '../data/relations'
 image_dir = '../data/VOCdevkit/VOC2012/JPEGImages'
 mask_dir = '../data/VOCdevkit/VOC2012/SegmentationClass'
 augmented_dir = '../data/VOCdevkit/VOC2012/AugmentedImages'
 
-os.mkdir('img')
-os.mkdir('msk')
+if not os.path.exists('img'):
+    os.mkdir('img')
+if not os.path.exists('msk'):
+    os.mkdir('msk')
 
 copy_images_and_masks(relation_folder, image_dir, mask_dir, augmented_dir)
