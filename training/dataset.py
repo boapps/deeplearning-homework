@@ -49,7 +49,7 @@ class VOCDataset(Dataset):
 
 
 def create_data_loaders(
-    image_dir, mask_dir, batch_size=8, val_split=0.3, num_workers=4
+    image_dir, mask_dir, batch_size=8, num_workers=4
 ):
     transform = transforms.Compose(
         [
@@ -67,21 +67,11 @@ def create_data_loaders(
         image_dir, mask_dir, transform=transform, mask_transform=mask_transform
     )
 
-    total_size = len(full_dataset)
-    not_train_size = int(val_split * total_size)
-    val_size = not_train_size // 2
-    test_size = not_train_size - val_size
-    train_size = total_size - val_size
-
     train_dataset, val_dataset, test_dataset = random_split(
         full_dataset,
-        [train_size, val_size, test_size],
+        [0.6, 0.2, 0.2],
         generator=torch.Generator().manual_seed(42),
     )
-
-    print(f"Total dataset size: {total_size}")
-    print(f"Training set size: {train_size}")
-    print(f"Validation set size: {val_size}")
 
     train_loader = DataLoader(
         train_dataset,
