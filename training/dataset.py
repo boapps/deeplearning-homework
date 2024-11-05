@@ -7,7 +7,8 @@ from torchmetrics import JaccardIndex
 from torchmetrics.segmentation import MeanIoU
 import numpy as np
 import torch.nn.functional as F
-
+from torch.utils.data import Subset
+from data_split import get_split_indices
 
 class VOCDataset(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None, mask_transform=None):
@@ -43,54 +44,29 @@ class VOCDataset(Dataset):
         return image, torch.from_numpy(mask)
 
 
-def create_data_loaders(
-    image_dir, mask_dir, batch_size=8, num_workers=4
-):
-    transform = transforms.Compose(
-        [
-            transforms.Resize((256, 256)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
+def create_data_loaders(image_dir, mask_dir, batch_size=8, num_workers=4):
+    transform = transforms.Compose([
+        transforms.Resize((256, 256)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    mask_transform = transforms.Compose([
+        transforms.Resize((256, 256), interpolation=Image.NEAREST)
+    ])
 
-    mask_transform = transforms.Compose(
-        [transforms.Resize((256, 256), interpolation=Image.NEAREST)]
-    )
+    full_dataset = VOCDataset(image_dir, mask_dir, transform=transform, mask_transform=mask_transform)
 
-    full_dataset = VOCDataset(
-        image_dir, mask_dir, transform=transform, mask_transform=mask_transform
-    )
+    split_indices = get_split_indices(image_dir)
 
-    train_dataset, val_dataset, test_dataset = random_split(
-        full_dataset,
-        [0.6, 0.2, 0.2],
-        generator=torch.Generator().manual_seed(42),
-    )
+    # Apply the predefined split indices
+    train_dataset = Subset(full_dataset, split_indices["train"])
+    val_dataset = Subset(full_dataset, split_indices["val"])
+    test_dataset = Subset(full_dataset, split_indices["test"])
 
-    train_loader = DataLoader(
-        train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=num_workers,
-        pin_memory=True,
-    )
-
-    val_loader = DataLoader(
-        val_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=num_workers,
-        pin_memory=True,
-    )
-
-    test_loader = DataLoader(
-        test_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=num_workers,
-        pin_memory=True,
-    )
+    # Create DataLoaders
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
 
     return train_loader, val_loader, test_loader
 
