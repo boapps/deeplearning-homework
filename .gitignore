@@ -166,3 +166,4 @@ training/img/
 training/msk/
 training/wandb/
 test/
+training/.gradio/
