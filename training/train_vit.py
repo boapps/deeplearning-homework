@@ -55,7 +55,7 @@ image_processor = AutoImageProcessor.from_pretrained(
     do_normalize=True,
     image_mean=[0.485, 0.456, 0.406],
     image_std=[0.229, 0.224, 0.225],
-    do_reduce_labels=True
+    do_reduce_labels=False
 )
 image_processor.save_pretrained("../data/vit")
 
@@ -107,8 +107,8 @@ model = AutoModelForSemanticSegmentation.from_pretrained(
 
 training_args = TrainingArguments(
     output_dir="mit-b0-pascal-voc",
-    learning_rate=4e-4,
-    num_train_epochs=1,
+    learning_rate=3e-4,
+    num_train_epochs=4,
     per_device_train_batch_size=8,
     per_device_eval_batch_size=32,
     save_total_limit=3,
