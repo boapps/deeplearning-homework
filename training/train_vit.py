@@ -48,7 +48,16 @@ id2label[255] = "255"
 label2id = {str(i): i for i in range(20)}
 label2id["255"] = 255
 
-image_processor = AutoImageProcessor.from_pretrained(checkpoint, do_reduce_labels=True)
+image_processor = AutoImageProcessor.from_pretrained(
+    'nvidia/mit-b0',
+    do_resize=True,
+    size={'height': 512, 'width': 512},
+    do_normalize=True,
+    image_mean=[0.485, 0.456, 0.406],
+    image_std=[0.229, 0.224, 0.225],
+    do_reduce_labels=True
+)
+image_processor.save_pretrained("../data/vit")
 
 def train_transforms(example_batch):
     images = [x for x in example_batch["image"]]
@@ -98,8 +107,8 @@ model = AutoModelForSemanticSegmentation.from_pretrained(
 
 training_args = TrainingArguments(
     output_dir="mit-b0-pascal-voc",
-    learning_rate=3e-4,
-    num_train_epochs=4,
+    learning_rate=4e-4,
+    num_train_epochs=1,
     per_device_train_batch_size=8,
     per_device_eval_batch_size=32,
     save_total_limit=3,
