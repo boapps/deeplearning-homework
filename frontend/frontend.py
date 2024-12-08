@@ -179,4 +179,4 @@ with demo:
     
     submit_button.click(segment_image, inputs=[image_input, model_choice], outputs=segmented_image_output)
 
-demo.launch()
+demo.launch(server_port='7860', server_name="0.0.0.0", debug=False)
