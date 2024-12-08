@@ -108,18 +108,18 @@ model = AutoModelForSemanticSegmentation.from_pretrained(
 training_args = TrainingArguments(
     output_dir="mit-b0-pascal-voc",
     learning_rate=3e-4,
-    num_train_epochs=4,
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=32,
-    save_total_limit=3,
-    eval_strategy="steps",
-    save_strategy="steps",
-    save_steps=240,
-    eval_steps=60,
-    logging_steps=10,
+    warmup_ratio=0.05,
+    weight_decay=0.05,
+    num_train_epochs=20,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=16,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    logging_steps=24,
+    gradient_accumulation_steps=2,
+    fp16=True,
     remove_unused_columns=False,
     report_to=None,
-    # push_to_hub=True,
 )
 
 trainer = Trainer(
@@ -134,3 +134,4 @@ trainer.train()
 trainer.evaluate()
 
 model.save_pretrained("../data/vit")
+
