@@ -6,6 +6,7 @@ from torchmetrics.segmentation import MeanIoU
 import torchvision.models.segmentation as seg_models
 import torch.nn.functional as F
 # import wandb
+import csv
 from dataset import create_data_loaders, evaluate_model
 
 # wandb.init(project="segmentation_project", entity="melytanulo-buvarok")
@@ -54,4 +55,31 @@ class UNet(pl.LightningModule):
 train_loader, val_loader, test_loader = create_data_loaders("./img", "./msk")
 model = UNet(num_classes=21)
 model.load_state_dict(torch.load("../data/cnn_v2.pth"))
-evaluate_model(model, test_loader, "cnn_v2")
+
+
+def save_per_class_iou(model, dataloader, num_classes, filename='../data/per_class_iou_cnn_v2.csv'):
+    model.eval()
+    iou_per_class = {i: {'intersection': 0, 'union': 0} for i in range(num_classes)}
+
+    with torch.no_grad():
+        for images, masks in dataloader:
+            outputs = model(images)
+            preds = outputs.argmax(dim=1)
+            for cls in range(num_classes):
+                intersection = ((preds == cls) & (masks == cls)).sum().item()
+                union = ((preds == cls) | (masks == cls)).sum().item()
+                iou_per_class[cls]['intersection'] += intersection
+                iou_per_class[cls]['union'] += union
+
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['class', 'iou'])
+        sum_iou = 0
+        for cls in range(num_classes):
+            union = iou_per_class[cls]['union']
+            iou = iou_per_class[cls]['intersection'] / union if union > 0 else 0
+            writer.writerow([cls, iou])
+            sum_iou += iou
+        print(f'Mean IoU: {sum_iou / num_classes}')
+
+save_per_class_iou(model, test_loader, num_classes=21)

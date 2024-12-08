@@ -6,6 +6,7 @@ from transformers import AutoModelForSemanticSegmentation, AutoImageProcessor, T
 import evaluate
 from data_split import get_split_indices  # Import split function
 import os
+import csv
 
 # Set paths and model checkpoint
 checkpoint = "../data/vit"
@@ -99,9 +100,42 @@ trainer = Trainer(
     compute_metrics=compute_metrics,
 )
 
+label_names = {
+    0: "Empty",
+    1: "Aeroplane",
+    2: "Bicycle",
+    3: "Bird",
+    4: "Boat",
+    5: "Bottle",
+    6: "Bus",
+    7: "Car",
+    8: "Cat",
+    9: "Chair",
+    10: "Cow",
+    11: "Diningtable",
+    12: "Dog",
+    13: "Horse",
+    14: "Motorbike",
+    15: "Person",
+    16: "Potted Plant",
+    17: "Sheep",
+    18: "Sofa",
+    19: "Train",
+    20: "TV/Monitor"
+}
+
 result = trainer.evaluate()
 print(result)
 with open(f"../data/test_vit.txt", 'w') as f:
     f.write(f"Test Loss: {result['eval_loss']:.4f}\n")
     # f.write(f"Validation Jaccard Index: {result['']:.4f}\n")
     f.write(f"Validation Mean IoU: {result['eval_mean_iou']:.4f}\n")
+    # Write per-class IoU scores
+    per_class_iou = result['eval_per_category_iou']
+    for idx, iou_score in enumerate(per_class_iou):
+        f.write(f"Class {label_names[idx]} IoU: {iou_score:.4f}\n")
+
+# Write the per-class IoU scores to a CSV file
+with open("../data/per_class_iou_vit.csv", 'w', newline='') as csvfile:
+    fieldnames = ['Class', 'IoU']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
