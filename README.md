@@ -136,6 +136,21 @@ docker compose up
 
 ## Related works
 
-## How to run
+## How to run frontend 
 
-### Requirements
+1. Navigate into the training folder
+
+2. Start the container:
+
+```bash
+docker compose up
+```
+
+- With this container you can start a gradio inference frontend to try out our two cnn and one vit models.
+
+### Requirements for frontend
+
+- 8 GB of storage
+- 2.5 GB of free ram recommended
+- Milestone 1 and 2 should be run beforehand. Alternatively you may download our models from our GitHub releases page and put them in the data folder (extracting vit.zip).
+- A recent version of docker and docker compose.
