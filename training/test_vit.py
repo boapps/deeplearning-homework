@@ -139,3 +139,6 @@ with open(f"../data/test_vit.txt", 'w') as f:
 with open("../data/per_class_iou_vit.csv", 'w', newline='') as csvfile:
     fieldnames = ['Class', 'IoU']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for idx, iou_score in enumerate(per_class_iou):
+        writer.writerow({'Class': label_names[idx], 'IoU': iou_score})
