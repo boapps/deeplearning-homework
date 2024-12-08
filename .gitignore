@@ -166,4 +166,9 @@ training/img/
 training/msk/
 training/wandb/
 test/
+training/mit-b0-pascal-voc/
+training/segformer-b0-scene-parse*/
+training/lightning_logs/
 training/.gradio/
+testing/img/
+testing/msk/
