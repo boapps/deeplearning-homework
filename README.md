@@ -29,7 +29,7 @@ Dataset chosen: [Pascal 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#de
 
 Initialization scripts:
 
-*These scripts are run automatically when you start the container.*
+_These scripts are run automatically when you start the container._
 
 - `data_preparation/download_data.py`: Downloads the dataset and extracts it into the `data` folder.
 - `data_preparation/convert_dataset.py`: Converts the xml files from the dataset to a single jsonlines file, which is necessary for the `data_analysis.ipynb` notebook.
@@ -89,12 +89,11 @@ docker compose up
 - ~6 GB of free space: The docker image takes about 1 GB of storage, while the compressed+extracted dataset takes about 4.5 GB.
 - Port 8888 open.
 
-
 # Milestonse 2
 
 Initialization scripts:
 
-*These scripts are run automatically when you start the container.*
+_These scripts are run automatically when you start the container._
 
 - `training/copy_image_mask.py`: Organizes the images and masks, preparing them and placing them in the designated folder..
 - `training/data_split.py`: Splits the data into the well-known train, test, validation sets.
@@ -105,7 +104,6 @@ Initialization scripts:
 - `training/test_cnn_v2.py`: Tests a Fully-Convolutional Network model with a ResNet-101 backbone.
 - `training/train_vit.py`: Trains a Vision Transformer model which is based on the MiT-B0 architecture.
 - `training/test_vit.py`: Tests a Vision Transformer model which is based on the MiT-B0 architecture.
-
 
 ## Related works
 
@@ -130,3 +128,34 @@ docker compose up
 - Milestone 1 must be run beforehand.
 - A recent version of docker and docker compose.
 - ~22 GB of RAM is needed: The docker image takes about 11 GB of storage
+
+# Milestonse 3 / Final submission
+
+## Related works
+
+We used the following examples, when we created the Frontend-UI:
+
+- https://www.gradio.app/guides/the-interface-class#an-image-example
+
+- https://www.gradio.app/guides/image-classification-in-pytorch
+
+- https://www.gradio.app/main/docs/gradio/dropdown
+
+## How to run frontend
+
+1. Navigate into the training folder
+
+2. Start the container:
+
+```bash
+docker compose up
+```
+
+- With this container you can start a gradio inference frontend to try out our two cnn and one vit models.
+
+### Requirements for frontend
+
+- 8 GB of storage
+- 2.5 GB of free ram recommended
+- Milestone 1 and 2 should be run beforehand. Alternatively you may download our models from our GitHub releases page and put them in the data folder (extracting vit.zip).
+- A recent version of docker and docker compose.

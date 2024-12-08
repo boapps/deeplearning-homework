@@ -1,0 +1,9 @@
+services:
+  frontend:
+    image: buvarok-gradio
+    ports:
+      - 7860:7860
+    volumes:
+      - ../data:/data
+    build:
+      context: .
