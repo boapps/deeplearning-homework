@@ -8,7 +8,7 @@ from data_split import get_split_indices  # Import split function
 import os
 
 # Set paths and model checkpoint
-checkpoint = "nvidia/mit-b0"
+checkpoint = "../data/vit"
 
 image_dir = "./img"
 mask_dir = "./msk"
@@ -33,7 +33,7 @@ id2label[255] = "255"
 label2id = {str(i): i for i in range(20)}
 label2id["255"] = 255
 
-image_processor = AutoImageProcessor.from_pretrained(checkpoint, do_reduce_labels=True)
+image_processor = AutoImageProcessor.from_pretrained(checkpoint, do_reduce_labels=False)
 
 def test_transforms(example_batch):
     images = [x for x in example_batch["image"]]

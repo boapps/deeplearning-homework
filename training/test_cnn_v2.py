@@ -53,5 +53,5 @@ class UNet(pl.LightningModule):
 
 train_loader, val_loader, test_loader = create_data_loaders("./img", "./msk")
 model = UNet(num_classes=21)
-model.state_dict = torch.load("../data/cnn_v2.pth")
+model.load_state_dict(torch.load("../data/cnn_v2.pth"))
 evaluate_model(model, test_loader, "cnn_v2")
