@@ -6,7 +6,7 @@ import numpy as np
 from torchvision.models.segmentation import fcn_resnet50, fcn_resnet101
 from torchvision import transforms
 
-checkpoint = "../data/vit.best"
+checkpoint = "../data/vit"
 id2label = {i: str(i) for i in range(20)}
 id2label[255] = "255"
 label2id = {str(i): i for i in range(20)}
