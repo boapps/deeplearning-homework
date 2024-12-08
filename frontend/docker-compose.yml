@@ -1,0 +1,17 @@
+services:
+  training:
+    image: buvarok-gradio
+    ports:
+      - 7860:7860
+    volumes:
+      - ../data:/data
+    build:
+      context: .
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    shm_size: '22gb'

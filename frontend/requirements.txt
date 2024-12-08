@@ -1,0 +1,16 @@
+numpy
+setuptools
+tqdm
+xmltodict
+jsonlines
+torch
+torchvision
+lightning
+wandb
+transformers
+datasets
+evaluate
+pillow
+Pygments
+git+https://github.com/huggingface/accelerate
+gradio
